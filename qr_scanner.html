@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <style>
+        /* Algemene stijl */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            overflow: hidden;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        /* Tekststijl */
+        h1, p {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Vuurwerk achtergrond (GIF's) */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://i.gifer.com/7PLR.gif'), url('https://i.gifer.com/XOsX.gif');
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            opacity: 0.4;
+            z-index: 1;
+        }
+
+        /* Container voor scanner */
+        #qr-reader {
+            position: relative;
+            margin: 50px auto;
+            width: 300px;
+            height: 300px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 3px solid white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px white;
+            z-index: 10;
+        }
+
+        /* Scanresultaat tekst */
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Vuurwerk achtergrond -->
+    <div class="background"></div>
+
+    <!-- Titel en instructies -->
+    <h1>🎇 QR Code Scanner 🎇</h1>
+    <p>Richt je camera op een QR-code om de inhoud te openen!</p>
+
+    <!-- Scanner container -->
+    <div id="qr-reader"></div>
+    <p id="result">Resultaat: <span style="color: lightgreen;">Nog geen QR-code gescand.</span></p>
+
+    <!-- QR-code scanner script -->
+    <script>
+        function onScanSuccess(decodedText, decodedResult) {
+            // Actie uitvoeren bij gescande QR-code
+            console.log(`QR Code gescand: ${decodedText}`);
+            alert(`QR Code gescand: ${decodedText}`);
+            document.getElementById('result').innerHTML = `Resultaat: <span style="color: lightgreen;">${decodedText}</span>`;
+            window.location.href = decodedText; // Navigeer naar de URL
+        }
+
+        function onScanError(errorMessage) {
+            // Fout bij scannen loggen (optioneel)
+            console.warn(`Fout bij scannen: ${errorMessage}`);
+        }
+
+        // QR-code scanner initialiseren
+        const html5QrcodeScanner = new Html5QrcodeScanner(
+            "qr-reader", // HTML-element-ID
+            { fps: 10, qrbox: 250 } // Frames per seconde en grootte van het scanvak
+        );
+        html5QrcodeScanner.render(onScanSuccess, onScanError);
+    </script>
+</body>
+</html>
